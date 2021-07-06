@@ -2,11 +2,25 @@
 // 它提供给用户一些api： commit/dispath
 let Vue
 class Store {
-  constructor (options) {
+  constructor (options = {}) {
     // 保持从main.js 传过来的选项
     this._mutations = options.mutations
     this._actions = options.actions
-
+    this._store = options.state
+    this._getters = options.getters || {}
+    this.getters = {}
+    const computed = {}
+    Object.keys(this._getters).forEach(key => {
+      const fn = this._getters[key]
+      computed[key] = () => {
+        return fn(this._store)
+      }
+      Object.defineProperty(this.getters, key, {
+        get: () => {
+          return this._vm[key]
+        }
+      })
+    })
     // 1.对state做响应式处理
     this._vm = new Vue({
       data () {
@@ -16,17 +30,10 @@ class Store {
           $$state: options.state
         }
       },
-      computed: {}
+      computed
     })
     this.commit = this.commit.bind(this)
     this.dispatch = this.dispatch.bind(this)
-    // 获取getters 对象
-    const getters = options.getters
-    // 利用computed 缓存特性
-    for (const key in getters) {
-      this._vm.$options.computed[key] = getters[key](options.state)
-    }
-    this.getters = this._vm.$options.computed
   }
 
   // 绑定this
