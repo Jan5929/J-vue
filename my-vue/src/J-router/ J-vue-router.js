@@ -40,7 +40,6 @@ JVueRouter.install = function (_vue) {
     beforeCreate () {
       // 此处的 this 指向 组件 实例
       if (this.$options.router) {
-        console.log(this, 'this')
         Vue.prototype.$router = this.$options.router
       }
     }

@@ -4,7 +4,6 @@ let Vue
 class Store {
   constructor (options) {
     // 保持从main.js 传过来的选项
-    console.log(options)
     this._mutations = options.mutations
     this._actions = options.actions
 
@@ -16,10 +15,18 @@ class Store {
         return {
           $$state: options.state
         }
-      }
+      },
+      computed: {}
     })
     this.commit = this.commit.bind(this)
     this.dispatch = this.dispatch.bind(this)
+    // 获取getters 对象
+    const getters = options.getters
+    // 利用computed 缓存特性
+    for (const key in getters) {
+      this._vm.$options.computed[key] = getters[key](options.state)
+    }
+    this.getters = this._vm.$options.computed
   }
 
   // 绑定this

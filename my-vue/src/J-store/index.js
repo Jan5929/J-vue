@@ -3,7 +3,8 @@ import Vuex from './J-vuex.js'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    counter: 1
+    counter: 1,
+    dounter: 2
   },
   mutations: {
     // state 哪里来的
@@ -20,6 +21,9 @@ export default new Vuex.Store({
   },
   getters: {
     doubleCounter: state => {
+      return state.counter * 2
+    },
+    doubleDounter: state => {
       return state.dounter * 2
     }
   }
