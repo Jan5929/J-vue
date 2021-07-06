@@ -5,6 +5,10 @@
       <span style="padding: 0 10px">|</span>
       <router-link to="/about">About</router-link>
     </div>
+    <p @click="$store.dispatch('add')">acync:{{ $store.state.counter }}</p>
+    <p @click="$store.commit('add')">{{ $store.state.counter }}</p>
+    <p>{{ $store.getters }}</p>
+
     <!-- 路由出口 -->
     <router-view />
   </div>
